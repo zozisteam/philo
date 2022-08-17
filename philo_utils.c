@@ -1,18 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   philosophers_utils.c                               :+:      :+:    :+:   */
+/*   philo_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:47:50 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/08/12 09:51:35 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/08/17 16:34:06 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
+long long	time_in_ms(void)
+{
+	struct timeval	time;
 
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000LL + time.tv_usec / 1000);
+}
+
+
+int	philo_idle(t_philosopher *philo, int tt_wait)
+{
+	long long	t;
+
+	t = time_in_ms();
+	while (time_in_ms() - t < tt_wait)
+	{
+		if (check_death_solo(philo) || philo->dining->all_ate == philo->dining->must_eat || philo->dining->dead)
+			return (1);
+		usleep(100);
+	}
+	return (0);
+}
 
 int	destroy_mutex(t_dining	*dining)
 {
