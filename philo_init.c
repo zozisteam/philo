@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 15:01:04 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/08/17 16:30:24 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/16 18:39:59 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,8 @@
 
 int	init_dining(char **argv, t_dining *dining)
 {
-	if (ft_atoi(argv[1]) <= 0 || ft_atoi(argv[2]) <= 0 ||  ft_atoi(argv[3]) <= 0 || ft_atoi(argv[4]) <= 0)
+	if (ft_atoi(argv[1]) <= 0 || ft_atoi(argv[2]) <= 0
+		|| ft_atoi(argv[3]) <= 0 || ft_atoi(argv[4]) <= 0)
 		return (1);
 	if (argv[5] && ft_atoi(argv[5]) <= 0)
 		return (1);
@@ -69,7 +70,7 @@ int	init_philosophers(t_dining *dining)
 		dining->philos[i].last_meal = 0;
 		i++;
 	}
-	return 0;
+	return (0);
 }
 
 int	init(char **argv, t_dining *dining)
@@ -80,6 +81,6 @@ int	init(char **argv, t_dining *dining)
 		return (1);
 	if (init_philosophers(dining))
 		return (1);
-	dining->start_time = time_in_ms();
+	dining->start = time_in_ms();
 	return (0);
 }

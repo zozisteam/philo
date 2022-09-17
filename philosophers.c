@@ -6,15 +6,57 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 19:50:19 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/08/17 16:29:39 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/17 18:02:42 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philosophers.h"
 
-int main(int argc, char **argv)
+int	eat(t_dining *dining, t_philosopher *philo)
 {
-	t_dining *dining;
+	if (check_death_solo(philo))
+		return (1);
+	if (take_forks(dining, philo))
+		return (1);
+	print(philo, (time_in_ms() - philo->dining->start), "is eating");
+	pthread_mutex_lock(&dining->meals_m);
+	philo->last_meal = time_in_ms();
+	philo->c_ate++;
+	pthread_mutex_unlock(&dining->meals_m);
+	philo_idle(philo, dining->tt_eat);
+	pthread_mutex_unlock(&dining->forks_mutex[philo->l_fork_id]);
+	pthread_mutex_unlock(&dining->forks_mutex[philo->r_fork_id]);
+	return (0);
+}
+
+void	*dine(void *phil)
+{
+	t_philosopher	*philo;
+	t_dining		*dining;
+
+	philo = (t_philosopher *)phil;
+	dining = philo->dining;
+	if (enter_philo(dining, philo))
+		return (0);
+	philo->last_meal = time_in_ms();
+	while (dining->dead == 0 && dining->all_ate == 0)
+	{
+		if (eat(dining, philo))
+			return (0);
+		if (check_death_solo(philo) || check_ate(philo))
+			return (0);
+		print(philo, (time_in_ms() - philo->dining->start), "is sleeping");
+		philo_idle(philo, dining->tt_sleep);
+		print(philo, (time_in_ms() - philo->dining->start), "is thinking");
+		if (check_death_solo(philo) || check_ate(philo))
+			return (0);
+	}
+	return (0);
+}
+
+int	main(int argc, char **argv)
+{
+	t_dining	*dining;
 
 	if (argc < 5 || argc > 6)
 		exit(1);

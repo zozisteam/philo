@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:47:50 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/08/17 16:34:06 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/17 17:44:14 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ long long	time_in_ms(void)
 	return (time.tv_sec * 1000LL + time.tv_usec / 1000);
 }
 
-
 int	philo_idle(t_philosopher *philo, int tt_wait)
 {
 	long long	t;
@@ -28,7 +27,7 @@ int	philo_idle(t_philosopher *philo, int tt_wait)
 	t = time_in_ms();
 	while (time_in_ms() - t < tt_wait)
 	{
-		if (check_death_solo(philo) || philo->dining->all_ate == philo->dining->must_eat || philo->dining->dead)
+		if (check_death_solo(philo) || check_ate(philo))
 			return (1);
 		usleep(100);
 	}
@@ -81,7 +80,10 @@ int	ft_atoi(const char *str)
 
 void	print(t_philosopher *philo, unsigned long time, char *is_doing)
 {
-	pthread_mutex_lock(&philo->dining->print_mutex);
-	printf("%lums	%d %s\n", time, philo->id + 1, is_doing);
-	pthread_mutex_unlock(&philo->dining->print_mutex);
+	if (check_death_solo(philo) == 0)
+	{
+		pthread_mutex_lock(&philo->dining->print_mutex);
+		printf("%lums	%d %s\n", time, philo->id + 1, is_doing);
+		pthread_mutex_unlock(&philo->dining->print_mutex);
+	}
 }
