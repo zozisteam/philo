@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:29:37 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/17 19:53:52 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/20 14:17:07 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,30 +27,41 @@ int	enter_philo(t_dining *dining, t_philosopher *philo)
 
 int	take_forks(t_dining *dining, t_philosopher *philo)
 {
-	if (philo->id % 2 == 1)
-		pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
-	else
-		pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
-	print(philo, (time_in_ms() - philo->dining->start), "has taken a fork");
-	if (check_death_solo(philo) || check_ate(philo))
+	pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
+	pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
+	if (dining->forks[philo->l_fork_id] != philo->id
+		&& dining->forks[philo->r_fork_id] != philo->id)
 	{
-		if (philo->id % 2 == 1)
-			pthread_mutex_unlock(&dining->forks_mutex[philo->l_fork_id]);
-		else
-			pthread_mutex_unlock(&dining->forks_mutex[philo->r_fork_id]);
-		return (1);
-	}
-	if (philo->id % 2 == 1)
-		pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
-	else
-		pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
-	print(philo, (time_in_ms() - philo->dining->start), "has taken a fork");
-	if (check_death_solo(philo))
-	{
+		dining->forks[philo->l_fork_id] = philo->id;
+		dining->forks[philo->r_fork_id] = philo->id;
+		print(philo, (time_in_ms() - philo->dining->start), "has taken a fork");
+		print(philo, (time_in_ms() - philo->dining->start), "has taken a fork");
+		philo_idle(philo, dining->tt_eat);
+		print(philo, (time_in_ms() - philo->dining->start), "is eating");
+		pthread_mutex_lock(&dining->meals_m);
+		philo->last_meal = time_in_ms();
+		philo->c_ate++;
+		pthread_mutex_unlock(&dining->meals_m);
+		//unlock all mutexes
+		//sleep eating time             N.B: sleeping must happen without any lock
+		//--------------------------------------------- 
+		//lock then change forks data
+		// if (philo->id % 2 == 1)
+		// {
+			//pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
+			//pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
+		// }
+		// else
+		// {
+		// 	pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
+		// 	pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
+		// }
 		pthread_mutex_unlock(&dining->forks_mutex[philo->l_fork_id]);
 		pthread_mutex_unlock(&dining->forks_mutex[philo->r_fork_id]);
-		return (1);
+		return (0);
 	}
+	pthread_mutex_unlock(&dining->forks_mutex[philo->l_fork_id]);
+	pthread_mutex_unlock(&dining->forks_mutex[philo->r_fork_id]);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 15:07:36 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/17 20:05:32 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/20 13:15:06 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	check_death_solo(t_philosopher *philo)
 		pthread_mutex_lock(&philo->dining->dead_m);
 		philo->dining->dead = 1;
 		pthread_mutex_unlock(&philo->dining->dead_m);
-		usleep(100);
+		//usleep(100);
 		return (1);
 	}
 	return (0);
@@ -54,7 +54,7 @@ int	bg_death(t_philosopher *philo, t_dining *dining, int i)
 		pthread_mutex_lock(&dining->print_mutex);
 		pthread_mutex_lock(&dining->dead_m);
 		printf("%lldms %d died\n",
-			(time_in_ms() - philo->dining->start), philo[i].id + 1);
+			(time_in_ms() - philo->dining->start), philo[i].id);
 		dining->dead = 1;
 		pthread_mutex_unlock(&dining->dead_m);
 		pthread_mutex_unlock(&dining->print_mutex);
@@ -105,7 +105,7 @@ void	check_finish_bg(t_philosopher *philo, t_dining *dining)
 			}
 		}
 		i = (i + 1) % dining->no_of_philo;
-		usleep(200);
+		usleep(100);
 	}
 	return ;
 }

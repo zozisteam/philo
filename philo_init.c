@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 15:01:04 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/16 18:39:59 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/20 12:34:04 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	init_philosophers(t_dining *dining)
 	i = 0;
 	while (i < dining->no_of_philo)
 	{
-		dining->philos[i].id = i;
+		dining->philos[i].id = i + 1;
 		dining->philos[i].c_ate = 0;
 		if (i == dining->no_of_philo - 1)
 			dining->philos[i].r_fork_id = 0;

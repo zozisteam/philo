@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:47:50 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/17 17:44:14 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/20 13:17:12 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ void	print(t_philosopher *philo, unsigned long time, char *is_doing)
 	if (check_death_solo(philo) == 0)
 	{
 		pthread_mutex_lock(&philo->dining->print_mutex);
-		printf("%lums	%d %s\n", time, philo->id + 1, is_doing);
+		printf("%lums	%d %s\n", time, philo->id, is_doing);
 		pthread_mutex_unlock(&philo->dining->print_mutex);
 	}
 }
