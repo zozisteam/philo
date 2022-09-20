@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/04 14:29:37 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/20 14:17:07 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/20 14:52:12 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,20 +42,6 @@ int	take_forks(t_dining *dining, t_philosopher *philo)
 		philo->last_meal = time_in_ms();
 		philo->c_ate++;
 		pthread_mutex_unlock(&dining->meals_m);
-		//unlock all mutexes
-		//sleep eating time             N.B: sleeping must happen without any lock
-		//--------------------------------------------- 
-		//lock then change forks data
-		// if (philo->id % 2 == 1)
-		// {
-			//pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
-			//pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
-		// }
-		// else
-		// {
-		// 	pthread_mutex_lock(&dining->forks_mutex[philo->r_fork_id]);
-		// 	pthread_mutex_lock(&dining->forks_mutex[philo->l_fork_id]);
-		// }
 		pthread_mutex_unlock(&dining->forks_mutex[philo->l_fork_id]);
 		pthread_mutex_unlock(&dining->forks_mutex[philo->r_fork_id]);
 		return (0);
