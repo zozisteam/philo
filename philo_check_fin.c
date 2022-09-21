@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 15:07:36 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/20 13:15:06 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/21 16:14:06 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	check_death_solo(t_philosopher *philo)
 		pthread_mutex_lock(&philo->dining->dead_m);
 		philo->dining->dead = 1;
 		pthread_mutex_unlock(&philo->dining->dead_m);
-		//usleep(100);
 		return (1);
 	}
 	return (0);
@@ -46,6 +45,7 @@ int	check_death_solo(t_philosopher *philo)
 
 int	bg_death(t_philosopher *philo, t_dining *dining, int i)
 {
+	pthread_mutex_lock(&dining->meals_m);
 	if ((time_in_ms() - philo[i].last_meal) > philo->dining->tt_die
 		&& dining->all_ate == 0)
 	{
@@ -60,6 +60,7 @@ int	bg_death(t_philosopher *philo, t_dining *dining, int i)
 		pthread_mutex_unlock(&dining->print_mutex);
 		return (1);
 	}
+	pthread_mutex_unlock(&dining->meals_m);
 	return (0);
 }
 
@@ -90,10 +91,8 @@ void	check_finish_bg(t_philosopher *philo, t_dining *dining)
 	i = 0;
 	while (1)
 	{
-		pthread_mutex_lock(&dining->meals_m);
 		if (bg_death(philo, dining, i))
 			return ;
-		pthread_mutex_unlock(&dining->meals_m);
 		if (dining->must_eat > -1)
 		{
 			if (eat_count(dining, philo) == dining->no_of_philo)
@@ -105,6 +104,8 @@ void	check_finish_bg(t_philosopher *philo, t_dining *dining)
 			}
 		}
 		i = (i + 1) % dining->no_of_philo;
+		if (bg_death(philo, dining, i))
+			return ;
 		usleep(100);
 	}
 	return ;
