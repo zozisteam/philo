@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/02 14:29:12 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/20 16:42:18 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/21 21:06:23 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,6 @@
 # include <stdlib.h>
 # include <sys/time.h>
 # include <pthread.h>
-
-struct	s_philosophy;
 
 typedef struct s_philosopher
 {
