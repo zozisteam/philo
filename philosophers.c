@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/03 19:50:19 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/21 17:03:41 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/23 18:57:27 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ void	*dine(void *phil)
 			return (0);
 		print(philo, (time_in_ms() - philo->dining->start), "is sleeping");
 		philo_idle(philo, dining->tt_sleep);
+		if (check_death_solo(philo) || check_ate(philo))
+			return (0);
 		print(philo, (time_in_ms() - philo->dining->start), "is thinking");
 		if (check_death_solo(philo) || check_ate(philo))
 			return (0);

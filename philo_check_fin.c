@@ -6,7 +6,7 @@
 /*   By: alalmazr <alalmazr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/17 15:07:36 by alalmazr          #+#    #+#             */
-/*   Updated: 2022/09/21 20:51:55 by alalmazr         ###   ########.fr       */
+/*   Updated: 2022/09/23 18:38:43 by alalmazr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ int	check_death_solo(t_philosopher *philo)
 
 int	bg_death(t_philosopher *philo, t_dining *dining, int i)
 {
-	pthread_mutex_lock(&)
+	pthread_mutex_lock(&dining->meals_m);
 	if ((time_in_ms() - philo[i].last_meal) > philo->dining->tt_die
 		&& dining->all_ate == 0)
 	{
@@ -91,7 +91,6 @@ void	check_finish_bg(t_philosopher *philo, t_dining *dining)
 	i = 0;
 	while (1)
 	{
-		pthread_mutex_lock(&dining->meals_m);
 		if (bg_death(philo, dining, i))
 			return ;
 		if (dining->must_eat > -1)
@@ -104,7 +103,6 @@ void	check_finish_bg(t_philosopher *philo, t_dining *dining)
 				return ;
 			}
 		}
-		pthread_mutex_lock(&dining->meals_m);
 		if (bg_death(philo, dining, i))
 			return ;
 		i = (i + 1) % dining->no_of_philo;
